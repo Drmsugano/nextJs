@@ -1,31 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Tasks from "./components/Tasks";
 import AddTasks from "./components/AddTasks";
 
 function App() {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Estudar",
-      description: "Odiar Java",
-      isCompleted: false,
-    },
-    {
-      id: 2,
-      title: "Tomar Água",
-      description: "Odiar Java",
-      isCompleted: false,
-    },
-    {
-      id: 3,
-      title: "Praticar exercícios",
-      description: "Basquete",
-      isCompleted: false,
-    },
-  ]);
+  const [tasks, setTasks] = useState(
+    JSON.parse(localStorage.getItem("tasks")) || []
+  );
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  useEffect(() => {
+    async () => {
+      // Chamar a API
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/todos?_limit=10",
+        {
+          method: "GET",
+        }
+      );
+      const data = await response.json();
+
+      setTasks(data);
+    };
+
+    // fetchTasks();
+  }, []);
 
   function onTaskClick(taskId: number) {
-    const newTasks = tasks.map((task) => {
+    const newTasks = tasks.map((task: { id: number; isCompleted: any; }) => {
       // Atualiza apenas a tarefa com o ID correspondente
       if (task.id === taskId) {
         return { ...task, isCompleted: !task.isCompleted };
@@ -36,7 +40,7 @@ function App() {
   }
 
   function deleteTasks(taskId: number) {
-    const newTasks = tasks.filter((task) => task.id !== taskId);
+    const newTasks = tasks.filter((task: { id: number; }) => task.id !== taskId);
     setTasks(newTasks);
   }
 
