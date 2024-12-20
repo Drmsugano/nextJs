@@ -49,8 +49,8 @@ function AddTasks({ onAddTaskSubmit }: AddTasksProps) {
       >
         Adicionar
       </button>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
-      {success && <p className="text-green-500 text-sm">Tarefa adicionada com sucesso!</p>}
+      {error && <p className="text-white text-sm bg-red-500 rounded-md p-0.5 text-center font-bold">{error}</p>}
+      {success && <p className="text-white text-sm bg-green-500 rounded-md p-0.5 text-center font-bold">Tarefa adicionada com sucesso!</p>}
     </div>
   );
 }
